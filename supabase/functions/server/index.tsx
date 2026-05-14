@@ -123,14 +123,14 @@ app.use(
 );
 
 // Health check endpoint
-app.get("/make-server-0be7dc4c/health", (c) => {
+app.get("/server/health", (c) => {
   return c.json({ status: "ok" });
 });
 
 // ==================== AUTH ROUTES ====================
 
 // Sign up
-app.post("/make-server-0be7dc4c/auth/signup", async (c) => {
+app.post("/server/auth/signup", async (c) => {
   try {
     const { email, password, name, role, phoneNumber, studentId, universityId, vehicleInfo } = await c.req.json();
 
@@ -188,7 +188,7 @@ app.post("/make-server-0be7dc4c/auth/signup", async (c) => {
 });
 
 // Login
-app.post("/make-server-0be7dc4c/auth/login", async (c) => {
+app.post("/server/auth/login", async (c) => {
   try {
     const { email, password } = await c.req.json();
     
@@ -253,7 +253,7 @@ app.post("/make-server-0be7dc4c/auth/login", async (c) => {
 });
 
 // Logout - clear session from KV
-app.post("/make-server-0be7dc4c/auth/logout", async (c) => {
+app.post("/server/auth/logout", async (c) => {
   try {
     const accessToken = getSessionToken(c);
     if (accessToken) {
@@ -268,7 +268,7 @@ app.post("/make-server-0be7dc4c/auth/logout", async (c) => {
 });
 
 // Get session
-app.get("/make-server-0be7dc4c/auth/session", async (c) => {
+app.get("/server/auth/session", async (c) => {
   try {
     console.log('=== GET SESSION REQUEST ===');
     const accessToken = getSessionToken(c);
@@ -309,7 +309,7 @@ app.get("/make-server-0be7dc4c/auth/session", async (c) => {
 // ==================== USER ROUTES ====================
 
 // Get user profile
-app.get("/make-server-0be7dc4c/users/:userId", async (c) => {
+app.get("/server/users/:userId", async (c) => {
   try {
     const userId = c.req.param('userId');
     const user = await kv.get(`user:${userId}`);
@@ -326,7 +326,7 @@ app.get("/make-server-0be7dc4c/users/:userId", async (c) => {
 });
 
 // Update user profile
-app.put("/make-server-0be7dc4c/users/:userId", async (c) => {
+app.put("/server/users/:userId", async (c) => {
   try {
     console.log('=== UPDATE USER REQUEST START ===');
     const userId = c.req.param('userId');
@@ -387,7 +387,7 @@ app.put("/make-server-0be7dc4c/users/:userId", async (c) => {
 // ==================== RIDE ROUTES ====================
 
 // Create a ride
-app.post("/make-server-0be7dc4c/rides", async (c) => {
+app.post("/server/rides", async (c) => {
   try {
     const accessToken = getSessionToken(c);
     const { valid, userId: authUserId } = await validateSession(accessToken);
@@ -506,7 +506,7 @@ app.post("/make-server-0be7dc4c/rides", async (c) => {
 });
 
 // Get pending rides for a university
-app.get("/make-server-0be7dc4c/rides/pending/:universityId", async (c) => {
+app.get("/server/rides/pending/:universityId", async (c) => {
   try {
     const accessToken = getSessionToken(c);
     const { valid, userId: authUserId } = await validateSession(accessToken);
@@ -534,7 +534,7 @@ app.get("/make-server-0be7dc4c/rides/pending/:universityId", async (c) => {
 });
 
 // Accept a ride (driver)
-app.post("/make-server-0be7dc4c/rides/:rideId/accept", async (c) => {
+app.post("/server/rides/:rideId/accept", async (c) => {
   try {
     const accessToken = getSessionToken(c);
     const { valid, userId: authUserId } = await validateSession(accessToken);
@@ -593,7 +593,7 @@ app.post("/make-server-0be7dc4c/rides/:rideId/accept", async (c) => {
 });
 
 // Update ride status
-app.put("/make-server-0be7dc4c/rides/:rideId/status", async (c) => {
+app.put("/server/rides/:rideId/status", async (c) => {
   try {
     const accessToken = getSessionToken(c);
     const { valid, userId: authUserId } = await validateSession(accessToken);
@@ -626,7 +626,7 @@ app.put("/make-server-0be7dc4c/rides/:rideId/status", async (c) => {
 });
 
 // Cancel a ride (rider only, only if pending or accepted)
-app.post("/make-server-0be7dc4c/rides/:rideId/cancel", async (c) => {
+app.post("/server/rides/:rideId/cancel", async (c) => {
   try {
     const accessToken = getSessionToken(c);
     const { valid, userId: authUserId } = await validateSession(accessToken);
@@ -670,7 +670,7 @@ app.post("/make-server-0be7dc4c/rides/:rideId/cancel", async (c) => {
 });
 
 // Verify PIN and complete ride
-app.post("/make-server-0be7dc4c/rides/:rideId/verify-pin", async (c) => {
+app.post("/server/rides/:rideId/verify-pin", async (c) => {
   try {
     const accessToken = getSessionToken(c);
     const { valid, userId: authUserId } = await validateSession(accessToken);
@@ -758,7 +758,7 @@ app.post("/make-server-0be7dc4c/rides/:rideId/verify-pin", async (c) => {
 });
 
 // Get user's rides
-app.get("/make-server-0be7dc4c/rides/user/:userId", async (c) => {
+app.get("/server/rides/user/:userId", async (c) => {
   try {
     const accessToken = getSessionToken(c);
     const { valid, userId: authUserId } = await validateSession(accessToken);
@@ -795,7 +795,7 @@ app.get("/make-server-0be7dc4c/rides/user/:userId", async (c) => {
 // ==================== WALLET ROUTES ====================
 
 // Initialize Paystack transaction for wallet funding
-app.post("/make-server-0be7dc4c/wallet/paystack/initialize", async (c) => {
+app.post("/server/wallet/paystack/initialize", async (c) => {
   try {
     const accessToken = getSessionToken(c);
     const { valid, userId: authUserId } = await validateSession(accessToken);
@@ -859,7 +859,7 @@ app.post("/make-server-0be7dc4c/wallet/paystack/initialize", async (c) => {
 });
 
 // Verify Paystack transaction and credit wallet
-app.post("/make-server-0be7dc4c/wallet/paystack/verify", async (c) => {
+app.post("/server/wallet/paystack/verify", async (c) => {
   try {
     const accessToken = getSessionToken(c);
     const { valid, userId: authUserId } = await validateSession(accessToken);
@@ -935,7 +935,7 @@ app.post("/make-server-0be7dc4c/wallet/paystack/verify", async (c) => {
 });
 
 // Get Paystack public key for frontend
-app.get("/make-server-0be7dc4c/wallet/paystack/config", async (c) => {
+app.get("/server/wallet/paystack/config", async (c) => {
   try {
     const publicKey = await getPaystackPublicKey();
     if (!publicKey) {
@@ -948,7 +948,7 @@ app.get("/make-server-0be7dc4c/wallet/paystack/config", async (c) => {
 });
 
 // List Nigerian banks from Paystack
-app.get("/make-server-0be7dc4c/wallet/banks", async (c) => {
+app.get("/server/wallet/banks", async (c) => {
   try {
     const paystackSecretKey = await getPaystackSecretKey();
     const response = await fetch('https://api.paystack.co/bank?country=nigeria', {
@@ -966,7 +966,7 @@ app.get("/make-server-0be7dc4c/wallet/banks", async (c) => {
 });
 
 // Resolve bank account name
-app.post("/make-server-0be7dc4c/wallet/resolve-account", async (c) => {
+app.post("/server/wallet/resolve-account", async (c) => {
   try {
     const accessToken = getSessionToken(c);
     const { valid } = await validateSession(accessToken);
@@ -994,7 +994,7 @@ app.post("/make-server-0be7dc4c/wallet/resolve-account", async (c) => {
 });
 
 // Driver withdrawal request
-app.post("/make-server-0be7dc4c/wallet/withdraw", async (c) => {
+app.post("/server/wallet/withdraw", async (c) => {
   try {
     const accessToken = getSessionToken(c);
     const { valid, userId: authUserId } = await validateSession(accessToken);
@@ -1092,7 +1092,7 @@ app.post("/make-server-0be7dc4c/wallet/withdraw", async (c) => {
 });
 
 // Top up wallet (legacy - keep for backward compatibility)
-app.post("/make-server-0be7dc4c/wallet/topup", async (c) => {
+app.post("/server/wallet/topup", async (c) => {
   try {
     const accessToken = getSessionToken(c);
     const { valid, userId: authUserId } = await validateSession(accessToken);
@@ -1144,7 +1144,7 @@ app.post("/make-server-0be7dc4c/wallet/topup", async (c) => {
 // ==================== TRANSACTION ROUTES ====================
 
 // Get user transactions
-app.get("/make-server-0be7dc4c/transactions/:userId", async (c) => {
+app.get("/server/transactions/:userId", async (c) => {
   try {
     const accessToken = getSessionToken(c);
     const { valid, userId: authUserId } = await validateSession(accessToken);
@@ -1181,7 +1181,7 @@ app.get("/make-server-0be7dc4c/transactions/:userId", async (c) => {
 // ==================== DRIVER ROUTES ====================
 
 // Update driver availability
-app.put("/make-server-0be7dc4c/drivers/:userId/availability", async (c) => {
+app.put("/server/drivers/:userId/availability", async (c) => {
   try {
     const accessToken = getSessionToken(c);
     const { valid, userId: authUserId } = await validateSession(accessToken);
@@ -1237,7 +1237,7 @@ const requireAdmin = async (c: any) => {
   return { ok: true, user };
 };
 
-app.get("/make-server-0be7dc4c/cr-admin/stats", async (c) => {
+app.get("/server/cr-admin/stats", async (c) => {
   try {
     const auth = await requireAdmin(c);
     if (!auth.ok) return c.json({ error: auth.error }, auth.status);
@@ -1299,7 +1299,7 @@ app.get("/make-server-0be7dc4c/cr-admin/stats", async (c) => {
   }
 });
 
-app.get("/make-server-0be7dc4c/cr-admin/users", async (c) => {
+app.get("/server/cr-admin/users", async (c) => {
   try {
     const auth = await requireAdmin(c);
     if (!auth.ok) return c.json({ error: auth.error }, auth.status);
@@ -1313,7 +1313,7 @@ app.get("/make-server-0be7dc4c/cr-admin/users", async (c) => {
   }
 });
 
-app.get("/make-server-0be7dc4c/cr-admin/rides", async (c) => {
+app.get("/server/cr-admin/rides", async (c) => {
   try {
     const auth = await requireAdmin(c);
     if (!auth.ok) return c.json({ error: auth.error }, auth.status);
@@ -1327,7 +1327,7 @@ app.get("/make-server-0be7dc4c/cr-admin/rides", async (c) => {
   }
 });
 
-app.get("/make-server-0be7dc4c/cr-admin/transactions", async (c) => {
+app.get("/server/cr-admin/transactions", async (c) => {
   try {
     const auth = await requireAdmin(c);
     if (!auth.ok) return c.json({ error: auth.error }, auth.status);
@@ -1344,7 +1344,7 @@ app.get("/make-server-0be7dc4c/cr-admin/transactions", async (c) => {
 // ==================== NOTIFICATION ROUTES ====================
 
 // Get unread notifications for a driver
-app.get("/make-server-0be7dc4c/notifications/:userId", async (c) => {
+app.get("/server/notifications/:userId", async (c) => {
   try {
     const accessToken = getSessionToken(c);
     const { valid, userId: authUserId } = await validateSession(accessToken);
@@ -1363,7 +1363,7 @@ app.get("/make-server-0be7dc4c/notifications/:userId", async (c) => {
 });
 
 // Mark all notifications as read
-app.post("/make-server-0be7dc4c/notifications/:userId/read-all", async (c) => {
+app.post("/server/notifications/:userId/read-all", async (c) => {
   try {
     const accessToken = getSessionToken(c);
     const { valid, userId: authUserId } = await validateSession(accessToken);
@@ -1384,7 +1384,7 @@ app.post("/make-server-0be7dc4c/notifications/:userId/read-all", async (c) => {
 // ==================== ADMIN WEBHOOK CONFIG ROUTES ====================
 
 // Get Make.com webhook URL
-app.get("/make-server-0be7dc4c/cr-admin/webhook-config", async (c) => {
+app.get("/server/cr-admin/webhook-config", async (c) => {
   try {
     const auth = await requireAdmin(c);
     if (!auth.ok) return c.json({ error: auth.error }, auth.status);
@@ -1396,7 +1396,7 @@ app.get("/make-server-0be7dc4c/cr-admin/webhook-config", async (c) => {
 });
 
 // Set Make.com webhook URL
-app.post("/make-server-0be7dc4c/cr-admin/webhook-config", async (c) => {
+app.post("/server/cr-admin/webhook-config", async (c) => {
   try {
     const auth = await requireAdmin(c);
     if (!auth.ok) return c.json({ error: auth.error }, auth.status);
@@ -1417,7 +1417,7 @@ app.post("/make-server-0be7dc4c/cr-admin/webhook-config", async (c) => {
 // ==================== MAPS CONFIG ROUTE ====================
 
 // Get Google Maps API key for the frontend
-app.get("/make-server-0be7dc4c/maps/config", async (c) => {
+app.get("/server/maps/config", async (c) => {
   try {
     const apiKey = Deno.env.get('GOOGLE_MAPS_API_KEY');
     if (!apiKey) {

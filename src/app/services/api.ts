@@ -1,7 +1,7 @@
 import { projectId, publicAnonKey } from '/utils/supabase/info';
 import { User, Ride, Transaction } from '../types';
 
-const API_BASE = `https://${projectId}.supabase.co/functions/v1/make-server-0be7dc4c`;
+const API_BASE = `https://${projectId}.supabase.co/functions/v1/server`;
 
 // Store access token in memory
 let accessToken: string | null = null;
